@@ -9,12 +9,12 @@
 </head>
 <body>
     <div>
-        <form action="/members/sign-up" th:method="post">
+        <form action="/members/sign-up" method="post">
             <label for="member-id">ID</label>
-            <input id="member-id">
+            <input id="member-id" name="id">
             <br/>
             <label for="member-password">Password</label>
-            <input id="member-password" type="password">
+            <input id="member-password" name="password" type="password">
             <br>
             <button type="submit">회원가입</button>
         </form>

@@ -1,6 +1,6 @@
 package todo.asdf.controller;
 
-import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,15 +10,43 @@ import todo.asdf.repository.MapMemberRepository;
 import todo.asdf.repository.MemberRepository;
 
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 public class MemberController {
 
-    MemberRepository memberRepository = new MapMemberRepository();
+    @Autowired
+    MemberRepository memberRepository;
+    static Member loginMember;
+    static boolean isLogin = false;
 
+    // 로그인이 되어있지 않으면 Hello, guest로 표시하고, 로그인 되면 Hello, [id]로 표시하기
     @GetMapping("/")
-    public String showHomePage() {
+    public String showHomePage(Model model) {
+        model.addAttribute("isLogin", isLogin);
+        model.addAttribute("member", loginMember);
         return "home";
+    }
+
+    @PostMapping("/")
+    public String loginHomePage(MemberForm memberForm) {
+        Member findMember = memberRepository.findById(memberForm.getId());
+        if(Objects.equals(findMember.getPassword(), memberForm.getPassword())) {
+            isLogin = true;
+            loginMember = new Member();
+            loginMember.setId(memberForm.getId());
+            loginMember.setPassword(memberForm.getPassword());
+        }
+        return "redirect:/";
+    }
+
+    // 로그아웃 버튼을 눌렀을 떄 로그인 정보를 없애고 홈페이지로 돌아오는 기능을 추가할 것
+    @PostMapping("/logoutHomePage")
+    public String logoutHomePage() {
+        loginMember = null;
+        isLogin = false;
+
+        return "redirect:/";
     }
 
     @GetMapping("/members/sign-up")
@@ -27,10 +55,10 @@ public class MemberController {
     }
 
     @PostMapping("/members/sign-up")
-    public String postSignUp(MemberSignUpForm memberSignUpForm) {
+    public String postSignUp(MemberForm memberForm) {
         Member member = new Member();
-        member.setId(memberSignUpForm.getId());
-        member.setPassword(memberSignUpForm.getPassword());
+        member.setId(memberForm.getId());
+        member.setPassword(memberForm.getPassword());
         memberRepository.save(member);
 
         return "redirect:/";

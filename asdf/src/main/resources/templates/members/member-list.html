@@ -13,17 +13,14 @@
             <thead>
                 <tr>
                     <td>
-                        index
-                    </td>
-                    <td>
                         id
                     </td>
                 </tr>
             </thead>
             <tbody>
                 <tr th:each="member: ${memberList}">
-                    <td th:text="${member.index}"></td>
                     <td th:text="${member.id}"></td>
+                    <td th:text="${member.password}"></td>
                 </tr>
             </tbody>
         </table>

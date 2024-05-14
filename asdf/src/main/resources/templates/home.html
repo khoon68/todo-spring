@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -8,7 +8,22 @@
     <title>Home</title>
 </head>
 <body>
-    This is Home
+    <h2>This is Home</h2>
+    <span th:text="${isLogin} ? 'Welcome, ' + ${member.id} : 'Welcome, Guest'"></span>
+    <div th:if="${isLogin}">
+        <button th:onClick="|location.href='@{/logoutHomePage}'|" type="button">로그아웃</button>
+    </div>
+    <div th:unless="${isLogin}">
+        <form action="/" method="post">
+            <label for="member-id">ID</label>
+            <input id="member-id" name="id">
+            <br/>
+            <label for="member-password">Password</label>
+            <input id="member-password" name="password" type="password">
+            <br>
+            <button type="submit">로그인</button>
+        </form>
+    </div>
 
     <br>
     <a href="/members/sign-up">회원가입</a>
