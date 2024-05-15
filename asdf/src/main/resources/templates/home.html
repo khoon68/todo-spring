@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -14,7 +14,7 @@
         <button th:onClick="|location.href='@{/logoutHomePage}'|" type="button">로그아웃</button>
     </div>
     <div th:unless="${isLogin}">
-        <form action="/" method="post">
+        <form action="/login" method="post">
             <label for="member-id">ID</label>
             <input id="member-id" name="id">
             <br/>
@@ -23,6 +23,35 @@
             <br>
             <button type="submit">로그인</button>
         </form>
+    </div>
+
+    <div th:if="${isLogin}">
+        <form action="/todo" method="post">
+            <label for="content">Todo</label>
+            <input id="content" name="content">
+            <button type="submit">등록</button>
+        </form>
+        <br/>
+        <table>
+            <thead>
+                <tr>
+                    <td>index</td>
+                    <td>memberId</td>
+                    <td>content</td>
+                    <td>lastUpdatedDate</td>
+                    <td>complete</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="todo : ${todoList}">
+                    <td th:text="${todo.index}"></td>
+                    <td th:text="${todo.memberId}"></td>
+                    <td th:text="${todo.content}"></td>
+                    <td th:text="${todo.lastUpdatedDate}"></td>
+                    <td th:text="${todo.complete}"></td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
     <br>
